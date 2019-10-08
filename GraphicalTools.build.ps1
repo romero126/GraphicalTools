@@ -18,13 +18,16 @@ $script:RequiredBuildAssets = @{
             "publish/$script:ModuleName.dll",
             "publish/$script:ModuleName.pdb",
             "publish/$script:ModuleName.psd1",
-            "publish/$script:ModuleName.psm1"
+            "publish/$script:ModuleName.psm1",
+            "publish/MatterBridge/",
+            "publish/OutGridView.Gui/"
         )
-
+        
         'OutGridView.Models' = @(
             'publish/OutGridView.Models.dll',
             'publish/OutGridView.Models.pdb'
         )
+
     }
 }
 
@@ -101,29 +104,17 @@ task SetupDotNet -Before Clean, Build {
 
 task Build {
     Remove-Item $PSScriptRoot/module -Recurse -Force -ErrorAction Ignore
-
-    exec { & $script:dotnetExe publish -c $Configuration "$PSScriptRoot/src/$script:ModuleName/$script:ModuleName.csproj" }
-    exec { & $script:dotnetExe publish -c $Configuration "$PSScriptRoot/src/OutGridView.Models/OutGridView.Models.csproj" }
-
-
-    foreach ($targetPlatform in $script:TargetPlatforms) {
-        $buildPropertyParams = if ($targetPlatform -eq "win-x64") {
-            "/property:IsWindows=true"
-        }
-        else {
-            "/property:IsWindows=false"
-        }
-        exec { & $script:dotnetExe publish -c $Configuration "$PSScriptRoot/src/OutGridView.Gui/OutGridView.Gui.csproj" -r $targetPlatform $buildPropertyParams }
-    }
-}
+    exec { & $script:dotnetExe publish -c $Configuration "$PSScriptRoot/GraphicalTools.sln" }
+} 
 
 task Clean {
     #Remove Module Build
     Remove-Item $PSScriptRoot/module -Recurse -Force -ErrorAction Ignore
 
-    exec { & $script:dotnetExe clean -c $Configuration "$PSScriptRoot/src/$script:ModuleName/$script:ModuleName.csproj" }
-    exec { & $script:dotnetExe clean -c $Configuration "$PSScriptRoot/src/OutGridView.Models/OutGridView.Models.csproj" }
+    exec { & $script:dotnetExe clean -c $Configuration "$PSScriptRoot/GraphicalTools.sln" }
+
     exec { & $script:dotnetExe clean -c $Configuration "$PSScriptRoot/src/OutGridView.Gui/OutGridView.Gui.csproj" }
+    exec { & $script:dotnetExe clean -c $Configuration "$PSScriptRoot/src/Microsoft.PowerShell.GraphicalTools.MatterBridge/Microsoft.PowerShell.GraphicalTools.MatterBridge.csproj" }
 
     Get-ChildItem "$PSScriptRoot\module\$script:ModuleName\Commands\en-US\*-help.xml" -ErrorAction Ignore | Remove-Item -Force -ErrorAction Ignore
 }
@@ -144,28 +135,23 @@ task LayoutModule -After Build {
                 $binPath = Join-Path $basePath $bin
 
                 # Binplace the asset
-                Copy-Item -Force -Verbose $binPath $destDir
+
+                if (Test-Path $binPath -PathType Container)
+                {
+                    Write-Verbose "Performing the operation `"Copy Directory`" on the target Item: $binPath Destination: $destDir" -Verbose
+                    Copy-Item -Force $binPath $destDir -Recurse
+                }
+                else {
+                    Copy-Item -Force -Verbose $binPath $destDir
+                }
+
             }
         }
+
     }
 
-    foreach ($projectName in $script:NativeBuildAssets) {
-        foreach ($targetPlatform in $script:TargetPlatforms) {
-            $destDir = Join-Path $script:ModuleBinPath $projectName $targetPlatform
-
-            $null = New-Item -Force $destDir -Type Directory
-
-            # Get the project build dir path
-            $publishPath = [System.IO.Path]::Combine($PSScriptRoot, 'src', $projectName, 'bin', $Configuration, $script:TargetFramework, $targetPlatform, "publish\*" )
-
-            Write-Host $publishPath
-            # Binplace the asset
-            Copy-Item -Recurse -Force  $publishPath $destDir
-        }
-    }
-
-    Copy-Item -Force "$PSScriptRoot/README.md" $script:ModuleBinPath
-    Copy-Item -Force "$PSScriptRoot/LICENSE.txt" $script:ModuleBinPath
+    Copy-Item -Force -Verbose "$PSScriptRoot/README.md" $script:ModuleBinPath
+    Copy-Item -Force -Verbose "$PSScriptRoot/LICENSE.txt" $script:ModuleBinPath
 }
 
 task BuildCmdletHelp {

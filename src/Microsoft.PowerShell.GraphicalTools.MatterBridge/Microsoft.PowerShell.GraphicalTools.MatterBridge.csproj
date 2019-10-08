@@ -1,12 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\GraphicalTools.Common.props" />
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetRuntimes>win-x64;linux-x64;osx-x64;</TargetRuntimes>
+    <AssemblyName>Microsoft.PowerShell.GraphicalTools.MatterBridge</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RunTimeIdentifiers>win-x64;linux-x64;osx-x64;</RunTimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <!--<OutputPath>../../module/Microsoft.PowerShell.GraphicalTools/MatterBridge/$(TargetRuntime)</OutputPath>-->
   </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="Models\" />
     <Compile Update="**\*.xaml.cs">
@@ -27,18 +32,15 @@
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.0.0-preview7-27912-14" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include ="../OutGridView.Models/OutGridView.Models.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Watch Include="**\*.xaml" />
   </ItemGroup>
 
   <Target Name="BuildCore">
-    <MSBuild Projects="OutGridView.Gui.csproj" 
+    <MSBuild Projects="Microsoft.PowerShell.GraphicalTools.MatterBridge.csproj" 
       Properties="RunTimeIdentifier=linux-x64" />
-    <MSBuild Projects="OutGridView.Gui.csproj" 
+    <MSBuild Projects="Microsoft.PowerShell.GraphicalTools.MatterBridge.csproj" 
       Properties="RunTimeIdentifier=osx-x64" />
-    <MSBuild Projects="OutGridView.Gui.csproj" 
+    <MSBuild Projects="Microsoft.PowerShell.GraphicalTools.MatterBridge.csproj" 
       Properties="RunTimeIdentifier=win-x64" />
   </Target>
 

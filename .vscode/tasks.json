@@ -23,6 +23,29 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "build2",
+            "osx": {
+                "command": "/usr/local/bin/pwsh"
+            },
+            "windows": {
+                "command": "pwsh.exe"
+            },
+            "linux": {
+                "command": "/usr/local/bin/pwsh"
+            },
+            "type": "process",
+            "args": [
+                "-c",
+                ".//build.ps1",
+
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

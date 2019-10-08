@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AssemblyName>MatterBridge</AssemblyName>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+
+
+
+  <!--
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.PowerShell.GraphicalTools.MatterBridge\Microsoft.PowerShell.GraphicalTools.MatterBridge.csproj" PrivateAssets="All" >
+      <Name></Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetRuntime>Linux-x64</TargetRuntime>
+      <Targets>Build</Targets>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <OutputItemType>Content</OutputItemType>
+      <OutputPath>OSX-x64/</OutputPath>
+
+
+      <IncludeAssets>all</IncludeAssets>
+
+    </ProjectReference>
+  </ItemGroup>
+-->    
+
+
+
+
+
+</Project>

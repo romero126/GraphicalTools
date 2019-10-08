@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.2.1" />
+        <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.2.1" CopyToOutputDirectory="no"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -15,5 +15,13 @@
     <ItemGroup>
         <None Update="Microsoft.PowerShell.GraphicalTools.psd1" CopyToOutputDirectory="PreserveNewest" />
         <None Update="Microsoft.PowerShell.GraphicalTools.psm1" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+ 
+    <ItemGroup>
+        <ProjectReference Targets="BuildCore" Include="..\OutGridView.Gui\OutGridView.Gui.csproj" Properties="RunTimeIdentifier=win-x64" PrivateAssets="All" CopyLocal="False" />
+        <ProjectReference Targets="BuildCore" Include="..\Microsoft.PowerShell.GraphicalTools.MatterBridge\*.csproj" Properties="RunTimeIdentifier=win-x64" PrivateAssets="All" CopyLocal="False" />
+
+        <None LinkBase="OutGridView.Gui" Include="../OutGridView.Gui/bin/Debug/**/*" CopyToOutputDirectory="PreserveNewest" />
+        <None LinkBase="MatterBridge" Include="../Microsoft.PowerShell.GraphicalTools.MatterBridge/bin/Debug/**/*" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>
